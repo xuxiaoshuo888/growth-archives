@@ -4,39 +4,42 @@ import router from './router'
 import store from './store'
 import axios from './axios'
 import echarts from 'echarts'
+import {MessageBox} from 'element-ui'
+import $ from 'jquery'
+
 import './plugins/element.js'
 import {asyncRouterMap} from './router'
 
 import 'font-awesome/css/font-awesome.css'
 
 const requireComponent = require.context(
-  // 其组件目录的相对路径
-  './components',
-  // 是否查询其子目录
-  false,
-  // 匹配以.vue或js的正则表达式
-  /\.(vue|js)$/
+    // 其组件目录的相对路径
+    './components',
+    // 是否查询其子目录
+    false,
+    // 匹配以.vue或js的正则表达式
+    /\.(vue|js)$/
 )
 
 requireComponent.keys().forEach(fileName => {
   // 获取组件配置
   const componentConfig = requireComponent(fileName)
   // 剥去文件名开头的 `'./` 和结尾的扩展名
-  const componentName=fileName.replace(/^\.\/(.*)\.\w+$/, '$1')
+  const componentName = fileName.replace(/^\.\/(.*)\.\w+$/, '$1')
   // 全局注册组件
   Vue.component(
-    componentName,
-    // 如果这个组件选项是通过 `export default` 导出的，
-    // 那么就会优先使用 `.default`，
-    // 否则回退到使用模块的根。
-    componentConfig.default || componentConfig
+      componentName,
+      // 如果这个组件选项是通过 `export default` 导出的，
+      // 那么就会优先使用 `.default`，
+      // 否则回退到使用模块的根。
+      componentConfig.default || componentConfig
   )
 })
 
-Vue.prototype.$ajax=axios;
+Vue.prototype.$ajax = axios;
 Vue.prototype.$echarts = echarts;
-Vue.prototype.$proxy=process.env.VUE_APP_PROXY;
-
+Vue.prototype.$proxy = process.env.VUE_APP_PROXY;
+Vue.prototype.$messageBox = MessageBox
 Vue.config.productionTip = false
 
 /**
@@ -51,6 +54,7 @@ function hasPermission(roles, route) {
     return true
   }
 }
+
 /**
  * 递归过滤异步路由表，返回符合用户角色权限的路由表
  * @param routes asyncRouterMap
@@ -59,7 +63,7 @@ function hasPermission(roles, route) {
 function filterAsyncRouter(routes, roles) {
   const res = []
   routes.forEach(route => {
-    const tmp = { ...route }
+    const tmp = {...route}
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRouter(tmp.children, roles)
@@ -69,59 +73,102 @@ function filterAsyncRouter(routes, roles) {
   })
   return res
 }
+
 //获取cookie
-function getCookie(name){
-  let arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-  if(arr=document.cookie.match(reg)){
-    store.commit('setData',{
-      name:'cookie',
-      data:decodeURIComponent(arr[2])
+function getCookie(name) {
+  let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+  if (arr = document.cookie.match(reg)) {
+    store.commit('setData', {
+      name: 'cookie',
+      data: decodeURIComponent(arr[2])
     });
     return decodeURIComponent(arr[2]);
   }
   else
     return false;
 }
+
 //判断是否有token
-function hasToken(){
-  if(store.getters.token){
+function hasToken() {
+  if (store.getters.token) {
     return true;
   }
-  else if(sessionStorage.getItem('token')!==null){
-    store.commit('setToken',sessionStorage['token']);
+  else if (sessionStorage.getItem('token') !== null) {
+    store.commit('setToken', sessionStorage['token']);
     return true
   }
   else return false
 }
+
 router.beforeEach((to, from, next) => {
-  if(hasToken()){
-    if(store.getters.role.length===0){
+  if (hasToken()) {
+    if (store.getters.role.length === 0) {
+      console.log(store.getters.role.length)
       store.dispatch('getInfo')
-        .then(()=>{
-          router.addRoutes(filterAsyncRouter(asyncRouterMap,store.getters.role));
-          next({ ...to, replace: true });
-        })
+          .then(() => {
+            if (store.state.roleList.length > 0) {//后台传了角色列表
+              router.addRoutes(filterAsyncRouter(asyncRouterMap, store.getters.role));
+              next({...to, replace: true});
+            } else {//后台未传角色列表
+              console.log('none roleList')
+              Vue.prototype.$alert('您还没有角色', '标题', {
+                confirmButtonText: '确定',
+                callback: res => {
+                 console.log(res)
+                  // window.location.href= 'http://www.baidu.com'
+                  // axios.post('/getLoginUrl')
+                  //     .then(res=>{
+                  //       sessionStorage.clear();
+                  //       window.location.href=res.data.url;
+                  //     })
+
+                  axios.post('/logoutApi')
+                      .then(res=>{
+                        console.log(res)
+                        login=res.data.casLoginUrl;
+                        logout=res.data.casLogoutUrl;
+                        $.ajax({
+                          url: logout,
+                          type: "GET",
+                          dataType: "jsonp",
+                          jsonp: "callback",
+                          crossDomain: true,
+                          cache: false,
+                          success: function(data) {
+                            sessionStorage.clear();
+                            // window.location.href=login;
+                            console.log(data)
+                          },
+                          error: function(data) {
+                            console.log(data);
+                          }
+                        })
+                      })
+                }
+              });
+            }
+          })
     }
     else next();
   }
   else {
-    if(getCookie('LOGIN_UUID')){
-      store.dispatch('getToken')
-        .then(()=>{
+    // if(getCookie('LOGIN_UUID')){
+    store.dispatch('getToken')
+        .then(() => {
           store.dispatch('getInfo')
-            .then(()=>{
-              router.addRoutes(filterAsyncRouter(asyncRouterMap,store.getters.role));
-              next({ ...to, replace: true });
-            })
+              .then(() => {
+                router.addRoutes(filterAsyncRouter(asyncRouterMap, store.getters.role));
+                next({...to, replace: true});
+              })
         })
-    }
-    else{
-      axios.post('/getLoginUrl')
-        .then(res=>{
-          sessionStorage.clear();
-          window.location.href=res.data.url;
-        })
-    }
+    // }
+    // else{
+    //   axios.post('/getLoginUrl')
+    //     .then(res=>{
+    //       sessionStorage.clear();
+    //       window.location.href=res.data.url;
+    //     })
+    // }
   }
 });
 

@@ -6,7 +6,7 @@ import store from './store'
 //创建实例 axios.create([config])
 const instance=axios.create({
   // `baseURL` 将自动加在 `url` 前面，除非 `url` 是一个绝对 URL。
-  baseURL: process.env.NODE_ENV==='production'?'':'/proxy',
+  baseURL: process.env.NODE_ENV==='production'?'/growtharchives':'/proxy',
   // `timeout` 指定请求超时的毫秒数(0 表示无超时时间)
   timeout:50000,
   // `headers` 是即将被发送的自定义请求头
@@ -52,14 +52,14 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     res => {
       loading.close();
-      // if(res.data.errcode !== '0'){//非正常
-      //     if(res.data.errmsg){
-      //       Vue.prototype.$notify({
-      //         type:'info',
-      //         message:res.data.errmsg
-      //       });
-      //     }
-      //   }
+      if(res.data.errcode !== '0'){//非正常
+          if(res.data.errmsg){
+            Vue.prototype.$notify({
+              type:'info',
+              message:res.data.errmsg
+            });
+          }
+        }
       return res;
     },
     err => {
@@ -69,7 +69,7 @@ instance.interceptors.response.use(
           case 403:
             router.replace({
               path: '/loading',
-              //query: {redirect: router.currentRoute.fullPath}//登录成功后跳入浏览的当前页面
+              query: {redirect: router.currentRoute.fullPath}//登录成功后跳入浏览的当前页面
             })
         }
       }
