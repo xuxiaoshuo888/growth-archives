@@ -115,13 +115,6 @@ router.beforeEach((to, from, next) => {
                 confirmButtonText: '确定',
                 callback: res => {
                  console.log(res)
-                  // window.location.href= 'http://www.baidu.com'
-                  // axios.post('/getLoginUrl')
-                  //     .then(res=>{
-                  //       sessionStorage.clear();
-                  //       window.location.href=res.data.url;
-                  //     })
-
                   axios.post('/logoutApi')
                       .then(res=>{
                         console.log(res)
@@ -137,10 +130,10 @@ router.beforeEach((to, from, next) => {
                           success: function(data) {
                             sessionStorage.clear();
                             // window.location.href=login;
-                            console.log(data)
+                            // console.log(data)
                           },
                           error: function(data) {
-                            console.log(data);
+                            // console.log(data);
                           }
                         })
                       })
@@ -152,7 +145,7 @@ router.beforeEach((to, from, next) => {
     else next();
   }
   else {
-    // if(getCookie('LOGIN_UUID')){
+    if(getCookie('LOGIN_UUID')){
     store.dispatch('getToken')
         .then(() => {
           store.dispatch('getInfo')
@@ -161,14 +154,14 @@ router.beforeEach((to, from, next) => {
                 next({...to, replace: true});
               })
         })
-    // }
-    // else{
-    //   axios.post('/getLoginUrl')
-    //     .then(res=>{
-    //       sessionStorage.clear();
-    //       window.location.href=res.data.url;
-    //     })
-    // }
+    }
+    else{
+      axios.post('/getLoginUrl')
+        .then(res=>{
+          sessionStorage.clear();
+          window.location.href=res.data.url;
+        })
+    }
   }
 });
 

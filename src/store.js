@@ -36,17 +36,20 @@ export default new Vuex.Store({
     setRole(state, role) {
       state.role = role;
       sessionStorage['role'] = JSON.stringify(role);
+    },
+    deleteToken(state){
+      state.token = ''
     }
   },
   actions: {
     //通过cookie获取token
     getToken(context) {
       return new Promise((resolve, reject) => {
-        // axios.post('/gettoken',{uuid:context.getters.cookie}) //正式
-        axios.post('/api/desktop/getToken') //本地
+        axios.post('/gettoken',{uuid:context.getters.cookie}) //正式
+        // axios.post('/api/desktop/getToken') //本地
             .then(res => {
-              // context.commit('setToken', res.data.token);//在store.js中设置token //正式
-              context.commit('setToken', res.data.data.CZDA_TOKEN);//在store.js中设置token //本地
+              context.commit('setToken', res.data.token);//在store.js中设置token //正式
+              // context.commit('setToken', res.data.data.CZDA_TOKEN);//在store.js中设置token //本地
               resolve(res.data.token)
             })
             .catch(error => {

@@ -74,6 +74,7 @@
               cache: false,
               success: function(data) {
                 sessionStorage.clear();
+                this.$store.commit('deleteToken');
                 window.location.href=login;
                 console.log(data)
               },
