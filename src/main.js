@@ -101,7 +101,8 @@ function hasToken() {
 }
 
 router.beforeEach((to, from, next) => {
-  if (hasToken()) {
+  if (hasToken()) {//如果store中有token
+    console.log(1)
     if (store.getters.role.length === 0) {
       console.log(store.getters.role.length)
       store.dispatch('getInfo')
@@ -144,9 +145,11 @@ router.beforeEach((to, from, next) => {
     }
     else next();
   }
-  else {
-    if(getCookie('LOGIN_UUID')){
-    store.dispatch('getToken')
+  else {//store中没有token，需要从后台拿
+    console.log(2)
+    if(getCookie('LOGIN_UUID')){//如果有session
+      console.log(2.1)
+      store.dispatch('getToken')
         .then(() => {
           store.dispatch('getInfo')
               .then(() => {
@@ -155,9 +158,12 @@ router.beforeEach((to, from, next) => {
               })
         })
     }
-    else{
+    else{//如果没有session
+      console.log(2.2)
       axios.post('/getLoginUrl')
         .then(res=>{
+          console.log(res)
+          console.log('2.3')
           sessionStorage.clear();
           window.location.href=res.data.url;
         })
