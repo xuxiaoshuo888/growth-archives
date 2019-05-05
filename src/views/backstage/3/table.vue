@@ -146,7 +146,7 @@
       },
       //获取表格数据
       getTableData(){
-        this.$ajax.post('/api/archives/getArchivesPage', {studentId:this.studentId})
+        this.$ajax.post('/api/archives/getArchivesPage', {studentId:this.studentId,classId:this.classId})
           .then(res=>{
             this.total=res.data.data.records;
             this.tableData=res.data.data.rows;
