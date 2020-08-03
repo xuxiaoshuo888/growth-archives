@@ -17,22 +17,28 @@
                 <el-menu-item index="/archives" v-if="this.student">
                     <router-link to="/archives">我的档案</router-link>
                 </el-menu-item>
-                <el-menu-item index="/backstage/1" v-if="this.admin">
-                    <router-link to="/backstage/1">国家维度</router-link>
-                </el-menu-item>
-                <el-menu-item index="/backstage/2" v-if="this.admin">
-                    <router-link to="/backstage/2">学校维度</router-link>
-                </el-menu-item>
+                <!--<el-menu-item index="/backstage/1" v-if="this.admin">-->
+                    <!--<router-link to="/backstage/1">国家维度</router-link>-->
+                <!--</el-menu-item>-->
+                <!--<el-menu-item index="/backstage/2" v-if="this.admin">-->
+                    <!--<router-link to="/backstage/2">学校维度</router-link>-->
+                <!--</el-menu-item>-->
                 <el-menu-item index="/backstage/3" v-if="this.headTeacher||this.admin">
                     <router-link to="/backstage/3">档案管理</router-link>
                 </el-menu-item>
                 <el-submenu index="/backstage/4-1" v-if="!this.student">
-                    <template slot="title">评价</template>
+                    <template slot="title">系统设置</template>
                     <el-menu-item index="/backstage/4-1" v-if="this.teacher">
                         <router-link to="/backstage/4-1">过程评价</router-link>
                     </el-menu-item>
+                    <el-menu-item index="/backstage/1" v-if="this.admin">
+                        <router-link to="/backstage/1">评价维度</router-link>
+                    </el-menu-item>
+                    <el-menu-item index="/backstage/2" v-if="this.admin">
+                        <router-link to="/backstage/2">评价指标</router-link>
+                    </el-menu-item>
                     <el-menu-item index="/backstage/4-2" v-if="this.admin">
-                        <router-link to="/backstage/4-2">评价设置</router-link>
+                        <router-link to="/backstage/4-2">评价规则</router-link>
                     </el-menu-item>
                 </el-submenu>
                 <el-submenu index="/backstage/5-1" v-if="!this.student">

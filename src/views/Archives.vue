@@ -84,6 +84,7 @@
                     <img v-show="tree" :src="'tree/'+tree+'.png'"/>
                     <em>{{user.growths}}</em>
                     <div id="radar"></div>
+                    <div class="medalList"><img src="tree/medal.png" v-for="(m,index) in 5" :key="index" alt=""></div>
                 </div>
             </el-card>
             <div class="right">
@@ -722,6 +723,19 @@
                     margin: 0 auto;
                     background: url("../assets/img/tree/bg.jpg") no-repeat;
                     background-size: cover;
+                    .medalList{
+                        position: absolute;
+                        left: 0;
+                        bottom: 150px;
+                        height: 40px;
+                        width: 100%;
+                        z-index: 999;
+                        img{
+                            width: 40px;
+                            height: 40px;
+                            margin: 0 3px;
+                        }
+                    }
                     img {
                         width: 100%;
                     }
