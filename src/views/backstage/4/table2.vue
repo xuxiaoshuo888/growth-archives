@@ -1,7 +1,7 @@
 <template>
     <el-card class="page">
         <header slot="header">
-            评价设置
+            评价规则
         </header>
         <div class="btn">
             <el-button-group>

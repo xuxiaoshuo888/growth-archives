@@ -1,7 +1,7 @@
 <template>
     <el-card class="page">
         <header slot="header">
-            国家维度
+            评价维度
         </header>
         <el-table class="table" :data="tableData" border stripe>
             <el-table-column align="center" prop="bh" label="编号" min-width="40" sortable></el-table-column>

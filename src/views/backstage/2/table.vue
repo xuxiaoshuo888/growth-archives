@@ -1,7 +1,7 @@
 <template>
     <el-card class="page">
         <header slot="header">
-            学校维度
+            评价指标
         </header>
         <el-form class="search" size="medium" label-width="60px" :inline="true">
             <el-form-item label="名称">
