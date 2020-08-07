@@ -5,10 +5,10 @@
         </header>
         <el-form class="search" size="medium" label-width="60px" :inline="true">
             <el-form-item label="名称">
-                <el-input v-model="xxName" placeholder="学校维度名称"></el-input>
+                <el-input v-model="xxName" placeholder="评价指标名称"></el-input>
             </el-form-item>
             <el-form-item label="类型">
-                <el-select v-model="dimensionalityId" placeholder="国家维度">
+                <el-select v-model="dimensionalityId" placeholder="评价维度">
                     <el-option label="全部" value=""></el-option>
                     <el-option v-for="i in type" :label="i.name" :value="i.id"></el-option>
                 </el-select>
@@ -31,8 +31,8 @@
             <el-table-column align="center" type="selection" width="40"></el-table-column>
             <el-table-column align="center" prop="bh" label="编号" min-width="40" sortable></el-table-column>
             <el-table-column align="center" prop="order_on" label="排序" min-width="40" sortable></el-table-column>
-            <el-table-column align="center" prop="name" label="学校维度" min-width="50"></el-table-column>
-            <el-table-column align="center" prop="gjname" label="国家维度" min-width="50"></el-table-column>
+            <el-table-column align="center" prop="name" label="评价指标" min-width="50"></el-table-column>
+            <el-table-column align="center" prop="gjname" label="评价维度" min-width="50"></el-table-column>
             <el-table-column align="center" prop="jlfs" label="记录方式" min-width="40">
                 <template slot-scope="scope">{{scope.row.jlfs==='1'?'点选':'录入'}}</template>
             </el-table-column>
@@ -77,8 +77,8 @@
                 <el-form-item label="允许学生添加">
                     <el-switch v-model="ruleForm.is_student_add" active-value="1" inactive-value="0"></el-switch>
                 </el-form-item>
-                <el-form-item label="国家维度" prop="dimensionality_id">
-                    <el-select v-model="ruleForm.dimensionality_id" placeholder="请选择国家维度">
+                <el-form-item label="评价维度" prop="dimensionality_id">
+                    <el-select v-model="ruleForm.dimensionality_id" placeholder="请选择评价维度">
                         <el-option v-for="i in type" :label="i.name" :value="i.id"></el-option>
                     </el-select>
                 </el-form-item>

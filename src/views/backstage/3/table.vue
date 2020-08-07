@@ -32,7 +32,7 @@
         <el-table class="table" :data="tableData" border stripe @selection-change="handleSelectionChange">
             <el-table-column align="center" type="selection" width="40"></el-table-column>
             <el-table-column align="center" prop="studentname" label="学生" min-width="60"></el-table-column>
-            <el-table-column align="center" prop="xxwdname" label="学校维度" min-width="100" sortable></el-table-column>
+            <el-table-column align="center" prop="xxwdname" label="评价指标" min-width="100" sortable></el-table-column>
             <el-table-column align="center" prop="title" label="标题" min-width="180"></el-table-column>
             <el-table-column align="center" prop="lrsname" label="录入人" min-width="80"></el-table-column>
             <el-table-column align="center" prop="growth" label="成长值" min-width="50" sortable></el-table-column>
@@ -54,8 +54,8 @@
                 <el-form-item label="获奖时间">
                     <el-date-picker v-model="ruleForm.archive_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
                 </el-form-item>
-                <el-form-item label="学校维度" prop="school">
-                    <el-select v-model="ruleForm.dimensionality_school_id" placeholder="请选择学校维度" @change="schoolChange">
+                <el-form-item label="评价指标" prop="school">
+                    <el-select v-model="ruleForm.dimensionality_school_id" placeholder="请选择评价指标" @change="schoolChange">
                         <el-option v-for="i in schoolList" :label="i.name" :value="i.id"></el-option>
                     </el-select>
                 </el-form-item>
